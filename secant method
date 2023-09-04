@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <math.h>
+
+#define MAX_ITER 100
+#define EPSILON 1e-6
+
+double func(double x) {
+    // Define your function here. For example, let's find the root of f(x) = x^2 - 4.
+    return x*x - 4;
+}
+
+double secantMethod(double x0, double x1) {
+    int iter = 0;
+    double x2, f0, f1, f2;
+
+    do {
+        f0 = func(x0);
+        f1 = func(x1);
+
+        if (fabs(f1 - f0) < EPSILON) {
+            printf("Converged to a root: %lf\n", x1);
+            return x1;
+        }
+
+        x2 = x1 - (f1 * (x1 - x0)) / (f1 - f0);
+        f2 = func(x2);
+
+        x0 = x1;
+        x1 = x2;
+
+        iter++;
+    } while (iter < MAX_ITER);
+
+    printf("Maximum iterations reached. No convergence.\n");
+    return NAN; // Not-a-Number to indicate failure
+}
+
+int main() {
+    double x0 = 1.0; // Initial guess 1
+    double x1 = 2.0; // Initial guess 2
+
+    double root = secantMethod(x0, x1);
+
+    if (!isnan(root)) {
+        printf("Approximate root: %lf\n", root);
+    } else {
+        printf("Failed to find a root within the maximum number of iterations.\n");
+    }
+
+    return 0;
+}
